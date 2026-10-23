@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>AI 想像工房</title>
+<style>
+:root{--bg:#fff8ec;--card:#fff;--ink:#2b2a33;--mut:#6b6878;--line:#eadfc8;--pri:#ff7a45;--pri2:#ffe3d3;--ok:#2fb67c}
+@media(prefers-color-scheme:dark){:root{--bg:#1d1b24;--card:#2a2733;--ink:#f3f0fa;--mut:#aaa5bb;--line:#3d3948;--pri:#ff8f5e;--pri2:#4a3126;--ok:#4fd39b;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang HK","Noto Sans HK",sans-serif;line-height:1.6;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:640px;margin:0 auto;padding:16px}h1{font-size:22px;margin:4px 0}
+nav{display:flex;gap:6px;margin:10px 0 14px}nav button{flex:1;padding:10px 2px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font-size:13px;cursor:pointer}nav button.on{border-color:var(--pri);background:var(--pri2);font-weight:700}
+.card{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}.lbl{font-weight:700;margin:8px 0 6px}
+textarea,input,select{width:100%;padding:10px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px;margin-bottom:6px}textarea{min-height:80px}
+.go{width:100%;padding:13px;border:0;border-radius:14px;background:var(--pri);color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}.go:disabled{opacity:.5}
+.ghost{padding:8px 12px;border-radius:10px;border:2px solid var(--pri);background:transparent;color:var(--pri);font-weight:700;cursor:pointer;width:auto}
+.tip{background:var(--pri2);border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0}.new{background:var(--pri2);border-radius:12px;padding:12px}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:2px 10px;margin:3px 4px 0 0;font-size:13px}.note{font-size:12px;color:var(--mut)}.hide{display:none}
+.two{display:flex;gap:8px}.two>*{flex:1}.ch{border:2px dashed var(--line);border-radius:12px;padding:10px;margin-bottom:8px}
+.page{border-radius:16px;padding:24px 14px;text-align:center;color:#2b2a33;min-height:220px}.page .e{font-size:56px;letter-spacing:6px}.page p{font-size:18px;margin:12px 0 0}
+.pager{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.chat{display:flex;flex-direction:column;gap:8px;margin:10px 0;max-height:50vh;overflow-y:auto}.b{max-width:88%;padding:10px 12px;border-radius:14px;font-size:15px}
+.b.ai{background:var(--pri2);align-self:flex-start}.b.me{background:var(--card);border:2px solid var(--line);align-self:flex-end}
+.bar{display:flex;gap:6px;align-items:center}.bar input{flex:1;margin:0}
+.row{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}.row span:first-child{width:84px}.row .m{flex:1}.row em{width:40px;text-align:right;font-style:normal}
+.m{height:12px;background:var(--line);border-radius:99px;overflow:hidden}.m i{display:block;height:100%;background:var(--ok)}
+.top{display:flex;justify-content:space-between;align-items:center}
+</style></head><body><main>
+<section id="auth" class="card" style="margin-top:40px">
+<h1>🌈 AI 想像工房</h1><p class="note">家長註冊／登入，小朋友喺家長帳戶下使用。</p>
+<input id="em" type="email" placeholder="電郵" autocomplete="email"><input id="pw" type="password" placeholder="密碼（最少 6 個字）" autocomplete="current-password">
+<div class="two"><button class="go" id="li">登入</button><button class="go" id="su" style="background:transparent;color:var(--pri);border:2px solid var(--pri)">註冊</button></div><p class="note" id="am"></p></section>
+<div id="app" class="hide">
+<div class="top"><h1>🌈 AI 想像工房</h1><span><span class="note" id="who"></span> <button class="ghost" id="lo">登出</button></span></div>
+<nav id="tabs"><button data-t="idea" class="on">🖼️ 描述圖片</button><button data-t="book">📖 我嘅繪本</button><button data-t="talk">🎤 面試</button><button data-t="rep">👨‍👩‍👧 家長</button></nav>
+<section id="idea"><div class="card"><div class="lbl">你想 AI 畫一張乜嘢圖？</div><textarea id="t1" placeholder="例如：我想要一隻會飛嘅貓"></textarea><button class="go" id="b1">🔍 俾 AI 睇下</button></div><div id="r1"></div></section>
+<section id="book" class="hide"><div class="card"><div class="lbl">🧸 故事入面有邊啲角色？</div><div id="chs"></div><button class="ghost" id="addc">＋ 加角色</button>
+<div class="lbl">🌍 故事喺邊度發生？</div><input id="bgd" placeholder="例如：一個會下糖果雨嘅森林"><div class="lbl">📝 故事大綱</div>
+<input id="o1" placeholder="開頭：一開始發生咩事？"><input id="o2" placeholder="困難：遇到咩問題？"><input id="o3" placeholder="結局：最後點解決？"><button class="go" id="mk">✨ 製作我嘅繪本</button></div><div id="bk"></div></section>
+<section id="talk" class="hide"><div class="card">
+<div class="two"><div><div class="note">面試語言</div><select id="lg"><option value="yue">廣東話</option><option value="en">English</option><option value="cmn">普通話</option></select></div><div><div class="note">面試官聲線</div><select id="gd"><option value="f">女聲</option><option value="m">男聲</option></select></div></div>
+<div class="two"><div><div class="note">語速</div><select id="sp"><option value="0.7">慢</option><option value="0.9" selected>正常</option><option value="1.1">快</option></select></div><div><div class="note">程度</div><select id="lv"><option value="p1">升小</option><option value="s1">升中</option></select></div></div>
+<div id="acw" class="hide"><div class="note">英文口音</div><select id="ac"><option value="en-GB">英國</option><option value="en-US">美國</option></select></div>
+<button class="go" id="st">▶ 開始面試</button><div class="chat" id="ch"></div>
+<div class="bar hide" id="ib"><button class="ghost" id="mic">🎙️ 開口答</button><input id="ans" placeholder="講完會顯示喺度，亦可以打字"><button class="ghost" id="sd">送出</button></div>
+<p class="note" id="mm"></p><div id="fin"></div></div>
+<div class="card hide" id="adm"><div class="lbl">📚 面試題庫（管理員）</div><p class="note">每行一條題目。面試官會按次序問對應程度嘅題目；冇題目就由 AI 自己問。</p>
+<select id="ql2"><option value="all">通用</option><option value="p1">升小</option><option value="s1">升中</option></select><textarea id="qs" placeholder="貼上題目，每行一條"></textarea>
+<button class="ghost" id="sq">新增題目</button> <span class="note" id="sqm"></span><div id="ql" style="margin-top:10px"></div></div></section>
+<section id="rep" class="hide"><div id="rp"></div></section></div>
+</main><script type="module" src="/src/main.js"></script></body></html>
